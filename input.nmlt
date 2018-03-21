@@ -1,0 +1,72 @@
+  &magnetic_configuration
+  !choose the input G-eqdsk (tokamak equilibrium) file
+  ! gfile_name="g038300.03900"
+ ! gfile_name='g062585.02800'
+ !gfile_name='g059954.003030'
+gfile_name='gfile_circular'
+  /
+
+  &modify_magnetic_configuration
+  reverse_tf=.false. !is .true. reverse the direction of the original toroidal field specified in gfile
+  reverse_ip=.false. !is .true. reverse the direction of the original toroidal current specified in gfile
+  /
+
+&normalizing_nmlt
+  Ln=1.0d0 !a characteristic length (in unit of meter) used as a normalization factor in the numerical calculation, chosen by users
+  bn=1.d0 !a characteristic magnetic field strength (in unit of Tesla), chosen by users
+/
+ &ions_nmlt
+  mass_i=3.3452d-27 !particle mass in kg (mass=2._p_*1.6726d-27 is for Deuterium, mass=9.1094d-31 is for electron)
+  charge_i=1.6022d-19 !ion charge in coulumb
+  ti0=1.5d0 !in kev, ti0 is a typical value of ion temperature in the compuational region, it is used in setting the velocity range when loading markers
+  ni0=2.0d19 !unit m^-3
+  kappa_ni=1.66667d0 !in unit Ln^-1
+  kappa_ti=5.2272d0 !in unit Ln^-1
+  total_nmarker_i=640000  ! total number of ion markers (including all the particles in all the processors).
+/
+
+&electrons_nmlt
+  mass_e=9.1094d-31
+!  mass_e=3.3452d-27 !for testing
+  charge_e=1.6022d-19 !elementary charge in coulumb
+  te0=1.5d0 !in kev, ti0 is a typical value of ion temperature in the compuational region, it is used in setting the velocity range when loading markers
+  ne0=2.0d19 !unit m^-3
+  kappa_ne=10.0d0 !in unit Ln^-1
+  kappa_te=40.0d0 !in unit Ln^-1
+  total_nmarker_e=640000   ! total number of electron markers (including all the particles in all the processors).
+/
+
+
+&control_nmlt
+pfn_inner=0.25d0
+pfn_bdry=0.55d0
+!pfn_inner=0.2d0
+!pfn_bdry=0.9d0
+nflux=31
+mpoloidal=65 !must be an odd number and (mpoloidal-1)/(numprocs/ntube) must be an integer
+ntube=1
+mtoroidal=32 !must be an even number, which is required by the FFT algorithm I used
+!poloidal_angle_type='equal-arc'
+poloidal_angle_type='equal-volume'
+ion_spatial_loading_scheme=2 !1>uniform in (psi,theta,alpha) coordinates; 2=>uniform in real space
+ion_velocity_loading_scheme=2 !1=>uniform in cartesian (vx,vy,vz) coordinates; 2=>Isotropic Gaussian in (vx,vy,vz)
+electron_spatial_loading_scheme=2 !1=>uniform in (psi,theta,alpha) coordinates; 2=>uniform in Cartesian coordinates (i.e., uniform in real space)
+electron_velocity_loading_scheme=2 !1=>uniform in (v,theta_v,phi_v) coordinates; 2=>Isotropic Gaussian in (v,theta_v,phi_v)
+iplot_mode_structure=20
+kstart=1
+kend=0
+dtao_omega_i_axis=0.2d0 !time_step in unift of 1/omega_i_axis, where omega_i_axis is the ion cyclotron angular frequency at the magnetic axis
+niter=2
+filter_toroidal=.false.
+filter_radial=.false.
+toroidal_mode_number_included=29 !must be positive
+radial_harmonics_included=10
+nsegment=29 !(toroidal_mode_number_included/nsegment) shoud be an integer
+fluid_electron=.true.
+/
+
+&field_line_tracing_nl
+n_tor_loop=10
+max_npt_along_field_line=8000
+krad=1
+/
